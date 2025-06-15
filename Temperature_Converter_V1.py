@@ -61,7 +61,7 @@ class Converter:
 
         return frame
         
-    def create_to_cFrame(self):
+    def create_to_fFrame(self):
         frame = tk.Frame(self.container)
         frame.grid(row = 0, column = 0, sticky = "NSEW")
 
@@ -90,7 +90,7 @@ class Converter:
 
         return frame
 
-    def create_to_fFrame(self):
+    def create_to_cFrame(self):
         frame = tk.Frame(self.container)
         frame.grid(row = 0, column = 0, sticky = "NSEW")
 
@@ -120,30 +120,35 @@ class Converter:
         return frame
 
     def calculate_c_to_f(self):
-        if not self.temp_entry_c.get().lstrip("-").isnumeric():
-            self.c_conversion = "Invalid input, please enter a number"        
-        elif float(self.temp_entry_c.get()) < -273.15:
-            self.c_conversion = "Invalid temperature, can't go below absolute zero"
-        elif float(self.temp_entry_c.get()) == -273.15:
-            self.c_conversion = "Absolute zero, -459.67 Fahrenheit" 
+        try:
+            temp = float(self.temp_entry_c.get())
+        except ValueError:
+            self.c_conversion = "Invalid input, please enter a number"
         else:
-            self.c_conversion = f"{round((float(self.temp_entry_c.get()) * 1.8) + 32, 2)} Fahrenheit"
+            if temp < -273.15:
+                self.c_conversion = "Invalid temperature, can't go below absolute zero"
+            elif temp == -273.15:
+                self.c_conversion = "Absolute zero, -459.67 Fahrenheit"
+            else:
+                self.c_conversion = f"{round((temp * 1.8) + 32, 2)} Fahrenheit"
 
         self.c_conversion_answer.set(self.c_conversion)
-
         self.c_conversion_label.config(text = self.c_conversion)
 
     def calculate_f_to_c(self):
-        if not self.temp_entry_f.get().lstrip("-").isnumeric():
+        try:
+            temp = float(self.temp_entry_f.get())
+        except ValueError:
             self.f_conversion = "Invalid input, please enter a number"
-        elif float(self.temp_entry_f.get()) < -459.67:
-            self.f_conversion = "Invalid temperature, can't go below absolute zero"
-        elif float(self.temp_entry_f.get()) == -459.67:
-            self.f_conversion = "Absolute zero, -273.15 Centigrade"
         else:
-            self.f_conversion = f"{round((float(self.temp_entry_f.get()) - 32) * 5 / 9, 2)} Centigrade"
+            if temp < -459.67:
+                self.f_conversion = "Invalid temperature, can't go below absolute zero"
+            elif temp == -459.67:
+                self.f_conversion = "Absolute zero, -273.15 Centigrade"
+            else:
+                self.f_conversion = f"{round((temp - 32) * 5 / 9, 2)} Centigrade"
+        
         self.f_conversion_answer.set(self.f_conversion)
-
         self.f_conversion_label.config(text = self.f_conversion)
                                        
     def reset(self):
